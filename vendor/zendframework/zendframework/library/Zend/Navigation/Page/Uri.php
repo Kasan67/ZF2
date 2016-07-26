@@ -123,7 +123,7 @@ class Uri extends AbstractPage
      * Sets request for assembling URLs
      *
      * @param Request $request
-     * @return self Fluent interface, returns self
+     * @return Fluent interface, returns self
      */
     public function setRequest(Request $request = null)
     {

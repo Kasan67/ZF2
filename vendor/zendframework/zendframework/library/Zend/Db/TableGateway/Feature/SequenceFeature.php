@@ -42,8 +42,7 @@ class SequenceFeature extends AbstractFeature
     }
 
     /**
-     * @param Insert $insert
-     * @return Insert
+     * @param  Insert $insert
      */
     public function preInsert(Insert $insert)
     {
@@ -64,10 +63,6 @@ class SequenceFeature extends AbstractFeature
         return $insert;
     }
 
-    /**
-     * @param StatementInterface $statement
-     * @param ResultInterface $result
-     */
     public function postInsert(StatementInterface $statement, ResultInterface $result)
     {
         if ($this->sequenceValue !== null) {
@@ -89,7 +84,7 @@ class SequenceFeature extends AbstractFeature
                 $sql = 'SELECT ' . $platform->quoteIdentifier($this->sequenceName) . '.NEXTVAL as "nextval" FROM dual';
                 break;
             case 'PostgreSQL':
-                $sql = 'SELECT NEXTVAL(\'"' . $this->sequenceName . '"\')';
+                $sql = 'SELECT NEXTVAL(\'' . $this->sequenceName . '\')';
                 break;
             default :
                 return null;

@@ -107,4 +107,5 @@ class AuthorTag extends AbstractGenerator implements TagInterface
 
         return $output;
     }
+
 }

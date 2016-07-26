@@ -380,9 +380,10 @@ class ValueGenerator extends AbstractGenerator
                 break;
             case self::TYPE_OTHER:
             default:
-                throw new Exception\RuntimeException(
-                    sprintf('Type "%s" is unknown or cannot be used as property default value.', get_class($value))
-                );
+                throw new Exception\RuntimeException(sprintf(
+                                                         'Type "%s" is unknown or cannot be used as property default value.',
+                                                         get_class($value)
+                                                     ));
         }
 
         return $output;
@@ -397,7 +398,7 @@ class ValueGenerator extends AbstractGenerator
      */
     public static function escape($input, $quote = true)
     {
-        $output = addcslashes($input, "\\'");
+        $output = addcslashes($input, "'");
 
         // adds quoting strings
         if ($quote) {
@@ -429,4 +430,5 @@ class ValueGenerator extends AbstractGenerator
     {
         return $this->generate();
     }
+
 }

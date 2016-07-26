@@ -1,0 +1,48 @@
+<h1> Категории </h1>
+<a href="/admin/category/add/" class="btn btn-default">Добавить категорию</a><br><br>
+<?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        &times;
+    </button>
+    <ul><li>')
+        ->setMessageSeparatorString('</li><li>')
+        ->setMessageCloseString('</li></ul></div>');
+
+    echo $flash->render('error', array('alert', 'alert-dismissable', 'alert-danger'));
+    echo $flash->render('info', array('alert', 'alert-dismissable', 'alert-info'));
+    echo $flash->render('default', array('alert', 'alert-dismissable', 'alert-default'));
+    echo $flash->render('success', array('alert', 'alert-dismissable', 'alert-success'));
+
+?>
+<table class="table table-stripped table-hover">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        
+
+        <?php
+            foreach($category as $item){
+                echo "<tr>
+                        <td>{$item->getId()}</td>
+                        <td>{$item->getCategoryName()}</td>";
+                echo    '<td><a href="'.$this->url('admin/category', 
+                                                array('action' => 'edit', 'id' => $item->getId())).'" class=\'btn btn-info\'>Редактировать</a>&nbsp;&nbsp;
+                             <a href="'.$this->url('admin/category', 
+                                                array('action' => 'delete', 'id' => $item->getId())).'" onclick="if (confirm(\'Удалить запись?\')) { document.location = this.href; } return false;" class=\'btn btn-danger\'>Удалить</a></td>';
+            }
+        ?>
+
+    </tbody>
+</table>
+
+
+<?php
+
+echo $this->paginationControl($category, 'Sliding', 'pagination_control', array('route' => 'admin/category'));
+
+?>

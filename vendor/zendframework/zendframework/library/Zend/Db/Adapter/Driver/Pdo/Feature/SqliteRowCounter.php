@@ -64,7 +64,7 @@ class SqliteRowCounter extends AbstractFeature
 
     /**
      * @param $context
-     * @return \Closure
+     * @return closure
      */
     public function getRowCountClosure($context)
     {

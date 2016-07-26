@@ -1,0 +1,64 @@
+<h1> Пользователи </h1>
+<a href="/admin/customer/add/" class="btn btn-default"> Добавить пользователя</a>
+<?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        &times;
+    </button>
+    <ul><li>')
+        ->setMessageSeparatorString('</li><li>')
+        ->setMessageCloseString('</li></ul></div>');
+
+    echo $flash->render('error', array('alert', 'alert-dismissable', 'alert-danger'));
+    echo $flash->render('info', array('alert', 'alert-dismissable', 'alert-info'));
+    echo $flash->render('default', array('alert', 'alert-dismissable', 'alert-default'));
+    echo $flash->render('success', array('alert', 'alert-dismissable', 'alert-success'));
+
+?>
+<table class="table table-stripped table-hover">
+    <tbody>
+        <tr>
+            <th>id</th>
+            <th>Category</th>
+            <th>Login</th>
+            <th>Password</th>
+            <th>Email</th>
+            <th>AvatarExtension</th>
+            <th>RegistrationDate</th>
+            <th>Action</th>
+        </tr>
+        
+<?php 
+        
+    foreach($customers as $item){
+        $category = $item->getCategory();
+        if($category){
+            $catName = $category->getCategoryName();
+        } else {
+            $catName = '';
+        }
+    echo "<tr>
+                <td>{$item->getId()}</td>
+                <td>{$catName}</td>
+                <td>{$item->getLogin()}</td>
+                <td>{$item->getPassword()}</td>
+                <td>{$item->getEmail()}</td>
+                <td>{$item->getAvatarExtension()}</td>
+                <td>{$item->getAccountExpired()->format('Y-m-d H:i:s')}</td>";
+    echo    '<td><a href="'.$this->url('admin/customer', 
+                                                array('action' => 'edit', 'id' => $item->getId())).'" class=\'btn btn-info\'>Редактировать</a>&nbsp;&nbsp;
+                             <a href="'.$this->url('admin/customer', 
+                                                array('action' => 'delete', 'id' => $item->getId())).'" onclick="if (confirm(\'Удалить пользователя?\')) { document.location = this.href; } return false;" class=\'btn btn-danger\'>Удалить</a></td>';
+    }
+    
+?>
+    </tbody>
+</table>
+
+
+<?php
+
+echo $this->paginationControl($customers, 'Sliding', 'pagination_control', array('route' => 'admin/customer'));
+
+?>

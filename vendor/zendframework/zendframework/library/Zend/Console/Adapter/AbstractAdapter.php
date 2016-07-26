@@ -244,6 +244,7 @@ abstract class AbstractAdapter implements AdapterInterface
             }
         }
 
+
         // Draw corners
         if ($lineStyle !== static::LINE_NONE) {
             if ($color !== null) {
@@ -360,7 +361,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Determine and return current console width and height.
      *
-     * @return int[] array($width, $height)
+     * @return array array($width, $height)
      */
     public function getSize()
     {
@@ -516,10 +517,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function readLine($maxLength = 2048)
     {
-        $f    = fopen('php://stdin', 'r');
+        $f    = fopen('php://stdin','r');
         $line = stream_get_line($f, $maxLength, PHP_EOL);
         fclose($f);
-        return rtrim($line, "\n\r");
+        return rtrim($line,"\n\r");
     }
 
     /**
@@ -530,9 +531,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function readChar($mask = null)
     {
-        $f = fopen('php://stdin', 'r');
+        $f = fopen('php://stdin','r');
         do {
-            $char = fread($f, 1);
+            $char = fread($f,1);
         } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
         fclose($f);
         return $char;

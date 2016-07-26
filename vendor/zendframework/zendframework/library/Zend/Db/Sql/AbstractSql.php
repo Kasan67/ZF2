@@ -13,7 +13,6 @@ use Zend\Db\Adapter\Driver\DriverInterface;
 use Zend\Db\Adapter\ParameterContainer;
 use Zend\Db\Adapter\Platform\PlatformInterface;
 use Zend\Db\Adapter\StatementContainer;
-use Zend\Db\Sql\Platform\PlatformDecoratorInterface;
 
 abstract class AbstractSql
 {
@@ -174,14 +173,7 @@ abstract class AbstractSql
             $subselect->processInfo['paramPrefix'] = 'subselect' . $subselect->processInfo['subselectCount'];
 
             // call subselect
-            if ($this instanceof PlatformDecoratorInterface) {
-                /** @var Select|PlatformDecoratorInterface $subselectDecorator */
-                $subselectDecorator = clone $this;
-                $subselectDecorator->setSubject($subselect);
-                $subselectDecorator->prepareStatement(new \Zend\Db\Adapter\Adapter($driver, $platform), $stmtContainer);
-            } else {
-                $subselect->prepareStatement(new \Zend\Db\Adapter\Adapter($driver, $platform), $stmtContainer);
-            }
+            $subselect->prepareStatement(new \Zend\Db\Adapter\Adapter($driver, $platform), $stmtContainer);
 
             // copy count
             $this->processInfo['subselectCount'] = $subselect->processInfo['subselectCount'];
@@ -189,13 +181,7 @@ abstract class AbstractSql
             $parameterContainer->merge($stmtContainer->getParameterContainer()->getNamedArray());
             $sql = $stmtContainer->getSql();
         } else {
-            if ($this instanceof PlatformDecoratorInterface) {
-                $subselectDecorator = clone $this;
-                $subselectDecorator->setSubject($subselect);
-                $sql = $subselectDecorator->getSqlString($platform);
-            } else {
-                $sql = $subselect->getSqlString($platform);
-            }
+            $sql = $subselect->getSqlString($platform);
         }
         return $sql;
     }

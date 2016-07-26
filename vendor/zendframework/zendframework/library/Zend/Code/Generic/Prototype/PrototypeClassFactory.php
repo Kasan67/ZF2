@@ -11,6 +11,7 @@ namespace Zend\Code\Generic\Prototype;
 
 use Zend\Code\Reflection\Exception;
 
+
 /**
  * This is a factory for classes which are identified by name.
  *
@@ -79,7 +80,7 @@ class PrototypeClassFactory
 
     /**
      * @param string $name
-     * @return string
+     * @return mixed
      */
     protected function normalizeName($name)
     {
@@ -97,7 +98,7 @@ class PrototypeClassFactory
     }
 
     /**
-     * @param  string $prototypeName
+     * @param string$prototypeName
      * @return PrototypeInterface
      * @throws Exception\RuntimeException
      */

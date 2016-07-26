@@ -9,7 +9,7 @@
 
 namespace Zend\Http\Header;
 
-use Zend\Uri\UriFactory;
+use \Zend\Uri\UriFactory;
 
 /**
  * @throws Exception\InvalidArgumentException
@@ -17,13 +17,11 @@ use Zend\Uri\UriFactory;
  */
 class Origin implements HeaderInterface
 {
-    /**
-     * @var string
-     */
-    protected $value;
 
     public static function fromString($headerLine)
     {
+        $header = new static();
+
         list($name, $value) = explode(': ', $headerLine, 2);
 
         // check to ensure proper header type for this factory
@@ -36,15 +34,10 @@ class Origin implements HeaderInterface
             throw new Exception\InvalidArgumentException('Invalid header value for Origin key: "' . $name . '"');
         }
 
-        return new static($value);
-    }
+        // @todo implementation details
+        $header->value = $value;
 
-    /**
-     * @param string|null $value
-     */
-    public function __construct($value = null)
-    {
-        $this->value = (string) $value;
+        return $header;
     }
 
     public function getFieldName()

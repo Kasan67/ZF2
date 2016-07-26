@@ -65,15 +65,6 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Console::overrideIsConsole($this->usedConsoleBackup);
-
-        if (true !== $this->traceError) {
-            return;
-        }
-
-        $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
-        if ($exception instanceof \Exception) {
-            throw $exception;
-        }
     }
 
     /**
@@ -87,13 +78,12 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * Set the trace error flag
-     * @param  bool                       $traceError
+     * @param  bool $traceError
      * @return AbstractControllerTestCase
      */
     public function setTraceError($traceError)
     {
         $this->traceError = $traceError;
-
         return $this;
     }
 
@@ -108,13 +98,12 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * Set the usage of the console router or not
-     * @param  bool                       $boolean
+     * @param  bool $boolean
      * @return AbstractControllerTestCase
      */
     public function setUseConsoleRequest($boolean)
     {
         $this->useConsoleRequest = (bool) $boolean;
-
         return $this;
     }
 
@@ -129,7 +118,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * Set the application config
-     * @param  array                      $applicationConfig
+     * @param  array $applicationConfig
      * @return AbstractControllerTestCase
      * @throws LogicException
      */
@@ -146,7 +135,6 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
             $applicationConfig['module_listener_options']['config_cache_enabled'] = false;
         }
         $this->applicationConfig = $applicationConfig;
-
         return $this;
     }
 
@@ -199,9 +187,9 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Set the request URL
      *
-     * @param  string                     $url
-     * @param  string|null                $method
-     * @param  array|null                 $params
+     * @param  string $url
+     * @param  string|null $method
+     * @param  array|null $params
      * @return AbstractControllerTestCase
      */
     public function url($url, $method = HttpRequest::METHOD_GET, $params = array())
@@ -211,7 +199,6 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
             preg_match_all('/(--\S+[= ]"\S*\s*\S*")|(--\S+=\S+|--\S+\s\S+|\S+)/', $url, $matches);
             $params = str_replace(array(' "', '"'), array('=', ''), $matches[0]);
             $request->params()->exchangeArray($params);
-
             return $this;
         }
 
@@ -232,11 +219,8 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
             $query = array_merge($query, $params);
         } elseif ($method == HttpRequest::METHOD_PUT) {
             if (count($params) != 0) {
-                array_walk(
-                    $params,
-                    function (&$item, $key) {
-                        $item = $key . '=' . $item;
-                    }
+                array_walk($params,
+                    function (&$item, $key) { $item = $key . '=' . $item; }
                 );
                 $content = implode('&', $params);
                 $request->setContent($content);
@@ -263,9 +247,9 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
      *
      * The URL provided set the request URI in the request object.
      *
-     * @param  string      $url
+     * @param  string $url
      * @param  string|null $method
-     * @param  array|null  $params
+     * @param  array|null $params
      * @throws \Exception
      */
     public function dispatch($url, $method = null, $params = array(), $isXmlHttpRequest = false)
@@ -286,6 +270,15 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
 
         $this->url($url, $method, $params);
         $this->getApplication()->run();
+
+        if (true !== $this->traceError) {
+            return;
+        }
+
+        $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
+        if ($exception instanceof \Exception) {
+            throw $exception;
+        }
     }
 
     /**
@@ -316,7 +309,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Trigger an application event
      *
-     * @param  string                                $eventName
+     * @param  string $eventName
      * @return \Zend\EventManager\ResponseCollection
      */
     public function triggerApplicationEvent($eventName)
@@ -364,7 +357,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert modules were not loaded with the module manager
      *
-     * @param array $modules
+     * @param  array $modules
      */
     public function assertNotModulesLoaded(array $modules)
     {
@@ -395,14 +388,13 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
         if (null === $match) {
             $match = 0;
         }
-
         return $match;
     }
 
     /**
      * Assert response status code
      *
-     * @param int $code
+     * @param  int $code
      */
     public function assertResponseStatusCode($code)
     {
@@ -426,7 +418,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert not response status code
      *
-     * @param int $code
+     * @param  int $code
      */
     public function assertNotResponseStatusCode($code)
     {
@@ -480,14 +472,13 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
         $controllerIdentifier = $routeMatch->getParam('controller');
         $controllerManager    = $this->getApplicationServiceLocator()->get('ControllerManager');
         $controllerClass      = $controllerManager->get($controllerIdentifier);
-
         return get_class($controllerClass);
     }
 
     /**
      * Assert that the application route match used the given module
      *
-     * @param string $module
+     * @param  string $module
      */
     public function assertModuleName($module)
     {
@@ -507,7 +498,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used NOT the given module
      *
-     * @param string $module
+     * @param  string $module
      */
     public function assertNotModuleName($module)
     {
@@ -527,7 +518,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used the given controller class
      *
-     * @param string $controller
+     * @param  string $controller
      */
     public function assertControllerClass($controller)
     {
@@ -547,7 +538,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used NOT the given controller class
      *
-     * @param string $controller
+     * @param  string $controller
      */
     public function assertNotControllerClass($controller)
     {
@@ -567,7 +558,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used the given controller name
      *
-     * @param string $controller
+     * @param  string $controller
      */
     public function assertControllerName($controller)
     {
@@ -587,7 +578,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used NOT the given controller name
      *
-     * @param string $controller
+     * @param  string $controller
      */
     public function assertNotControllerName($controller)
     {
@@ -607,7 +598,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used the given action
      *
-     * @param string $action
+     * @param  string $action
      */
     public function assertActionName($action)
     {
@@ -627,7 +618,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used NOT the given action
      *
-     * @param string $action
+     * @param  string $action
      */
     public function assertNotActionName($action)
     {
@@ -647,7 +638,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used the given route name
      *
-     * @param string $route
+     * @param  string $route
      */
     public function assertMatchedRouteName($route)
     {
@@ -667,7 +658,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Assert that the application route match used NOT the given route name
      *
-     * @param string $route
+     * @param  string $route
      */
     public function assertNotMatchedRouteName($route)
     {
@@ -687,7 +678,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
      * Assert template name
      * Assert that a template was used somewhere in the view model tree
      *
-     * @param string $templateName
+     * @param  string $templateName
      */
     public function assertTemplateName($templateName)
     {
@@ -699,7 +690,7 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
      * Assert not template name
      * Assert that a template was not used somewhere in the view model tree
      *
-     * @param string $templateName
+     * @param  string $templateName
      */
     public function assertNotTemplateName($templateName)
     {
@@ -710,19 +701,18 @@ abstract class AbstractControllerTestCase extends PHPUnit_Framework_TestCase
     /**
      * Recursively search a view model and it's children for the given templateName
      *
-     * @param  \Zend\View\Model\ModelInterface $viewModel
-     * @param  string    $templateName
+     * @param ViewModel $viewModel
+     * @param string $templateName
      * @return boolean
      */
     protected function searchTemplates($viewModel, $templateName)
     {
-        if ($viewModel->getTemplate($templateName) == $templateName) {
+        if ($viewModel->getTemplate($templateName) == $templateName){
             return true;
         }
-        foreach ($viewModel->getChildren() as $child) {
+        foreach ($viewModel->getChildren() as $child){
             return $this->searchTemplates($child, $templateName);
         }
-
         return false;
     }
 }

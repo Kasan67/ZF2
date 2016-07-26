@@ -73,7 +73,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Admin\Controller\Index' => 'Admin\Controller\IndexController',
         ),
     ),
     'view_manager' => array(
@@ -90,6 +91,9 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+        'template_map' => array(
+            'pagination_control' => __DIR__ . '/../view/layout/pagination_control.phtml',
         ),
     ),
     // Placeholder for console routes

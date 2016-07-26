@@ -11,6 +11,7 @@ namespace Zend\Code\Generator\DocBlock;
 
 use Zend\Code\Generator\DocBlock\Tag\TagInterface;
 use Zend\Code\Generic\Prototype\PrototypeClassFactory;
+
 use Zend\Code\Reflection\DocBlock\Tag\TagInterface as ReflectionTagInterface;
 
 /**

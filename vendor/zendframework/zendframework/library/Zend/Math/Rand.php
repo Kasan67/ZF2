@@ -39,7 +39,7 @@ abstract class Rand
         if ($length <= 0) {
             return false;
         }
-
+        $bytes = '';
         if (function_exists('openssl_random_pseudo_bytes')
             && ((PHP_VERSION_ID >= 50304)
             || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
@@ -77,7 +77,7 @@ abstract class Rand
      */
     public static function getAlternativeGenerator()
     {
-        if (null !== static::$generator) {
+        if (!is_null(static::$generator)) {
             return static::$generator;
         }
         if (!class_exists('RandomLib\\Factory')) {
@@ -136,9 +136,8 @@ abstract class Rand
         // calculate number of bits required to store range on this machine
         $r = $range;
         $bits = 0;
-        while ($r) {
+        while ($r >>= 1) {
             $bits++;
-            $r >>= 1;
         }
 
         $bits   = (int) max($bits, 1);

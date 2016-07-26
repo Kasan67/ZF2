@@ -37,7 +37,7 @@ trait TranslatorAwareTrait
     {
         $this->translator = $translator;
 
-        if (null !== $textDomain) {
+        if (!is_null($textDomain)) {
             $this->setTranslatorTextDomain($textDomain);
         }
 
@@ -61,7 +61,7 @@ trait TranslatorAwareTrait
      */
     public function hasTranslator()
     {
-        return (null !== $this->translator);
+        return !is_null($this->translator);
     }
 
     /**

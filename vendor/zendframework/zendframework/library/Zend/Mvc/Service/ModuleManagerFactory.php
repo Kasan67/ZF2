@@ -118,7 +118,7 @@ class ModuleManagerFactory implements FactoryInterface
         $serviceListener->addServiceManager(
             'LogWriterManager',
             'log_writers',
-            'Zend\ModuleManager\Feature\LogWriterProviderInterface',
+            'Zend\ModuleManager\Feature\LogWritersProviderInterface',
             'getLogWriterConfig'
         );
 

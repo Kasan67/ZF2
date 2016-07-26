@@ -193,12 +193,11 @@ abstract class AbstractContainer implements Countable, RecursiveIterator
     /**
      * Removes the given page from the container
      *
-     * @param  Page\AbstractPage|int $page      page to remove, either a page
-     *                                          instance or a specific page order
-     * @param  bool                  $recursive [optional] whether to remove recursively
+     * @param  Page\AbstractPage|int $page page to remove, either a page
+     *                                     instance or a specific page order
      * @return bool whether the removal was successful
      */
-    public function removePage($page, $recursive = false)
+    public function removePage($page)
     {
         if ($page instanceof Page\AbstractPage) {
             $hash = $page->hashCode();
@@ -216,16 +215,6 @@ abstract class AbstractContainer implements Countable, RecursiveIterator
             unset($this->index[$hash]);
             $this->dirtyIndex = true;
             return true;
-        }
-
-        if ($recursive) {
-            /** @var \Zend\Navigation\Page\AbstractPage $childPage */
-            foreach ($this->pages as $childPage) {
-                if ($childPage->hasPage($page, true)) {
-                    $childPage->removePage($page, true);
-                    return true;
-                }
-            }
         }
 
         return false;

@@ -213,7 +213,8 @@ class Mcrypt implements SymmetricInterface
      */
     public function getKeySize()
     {
-        return mcrypt_get_key_size($this->supportedAlgos[$this->algo], $this->supportedModes[$this->mode]);
+        return mcrypt_get_key_size($this->supportedAlgos[$this->algo],
+                                   $this->supportedModes[$this->mode]);
     }
 
     /**
@@ -241,9 +242,9 @@ class Mcrypt implements SymmetricInterface
         if (!empty($keySizes) && $keyLen < $maxKey) {
 
             if (!in_array($keyLen, $keySizes)) {
-                throw new Exception\InvalidArgumentException(
-                    "The size of the key must be one of " . implode(", ", $keySizes) . " bytes or longer"
-                );
+                 throw new Exception\InvalidArgumentException(
+                    "The size of the key must be one of "
+                    . implode(", ", $keySizes) . " bytes or longer");
             }
         }
         $this->key = $key;
@@ -391,7 +392,8 @@ class Mcrypt implements SymmetricInterface
      */
     public function getSaltSize()
     {
-        return mcrypt_get_iv_size($this->supportedAlgos[$this->algo], $this->supportedModes[$this->mode]);
+        return mcrypt_get_iv_size($this->supportedAlgos[$this->algo],
+                                  $this->supportedModes[$this->mode]);
     }
 
     /**
@@ -504,6 +506,7 @@ class Mcrypt implements SymmetricInterface
      */
     public function getBlockSize()
     {
-        return mcrypt_get_block_size($this->supportedAlgos[$this->algo], $this->supportedModes[$this->mode]);
+        return mcrypt_get_block_size($this->supportedAlgos[$this->algo],
+                                     $this->supportedModes[$this->mode]);
     }
 }

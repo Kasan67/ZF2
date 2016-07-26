@@ -220,7 +220,7 @@ class DateTimeSelect extends DateSelect
             }
         }
 
-        if (null === $value) {
+        if (is_null($value)) {
             $value = new PhpDateTime();
         }
 

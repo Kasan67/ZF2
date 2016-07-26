@@ -192,6 +192,7 @@ class Reader
     {
         $cache       = self::getCache();
         $feed        = null;
+        $responseXml = '';
         $client      = self::getHttpClient();
         $client->resetParameters();
         $headers = new ZendHttp\Headers();
@@ -265,7 +266,7 @@ class Reader
      * HTTP client implementations.
      *
      * @param  string $uri
-     * @param  Http\ClientInterface $client
+     * @param  Http\Client $client
      * @return self
      * @throws Exception\RuntimeException if response is not an Http\ResponseInterface
      */

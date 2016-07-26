@@ -67,6 +67,7 @@ abstract class AbstractWriter implements WriterInterface
      * - formatter: formatter for this writer
      *
      * @param  array|Traversable $options
+     * @return Logger
      * @throws Exception\InvalidArgumentException
      */
     public function __construct($options = null)
@@ -78,11 +79,11 @@ abstract class AbstractWriter implements WriterInterface
         if (is_array($options)) {
             if (isset($options['filters'])) {
                 $filters = $options['filters'];
-                if (is_int($filters) || is_string($filters) || $filters instanceof Filter\FilterInterface) {
+                if (is_string($filters) || $filters instanceof Filter\FilterInterface) {
                     $this->addFilter($filters);
                 } elseif (is_array($filters)) {
                     foreach ($filters as $filter) {
-                        if (is_int($filter) || is_string($filter) || $filter instanceof Filter\FilterInterface) {
+                        if (is_string($filter) || $filter instanceof Filter\FilterInterface) {
                             $this->addFilter($filter);
                         } elseif (is_array($filter)) {
                             if (!isset($filter['name'])) {
@@ -295,9 +296,9 @@ abstract class AbstractWriter implements WriterInterface
 
         if (!$formatter instanceof Formatter\FormatterInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Formatter must implement %s\Formatter\FormatterInterface; received "%s"',
-                __NAMESPACE__,
-                is_object($formatter) ? get_class($formatter) : gettype($formatter)
+                    'Formatter must implement %s\Formatter\FormatterInterface; received "%s"',
+                    __NAMESPACE__,
+                    is_object($formatter) ? get_class($formatter) : gettype($formatter)
             ));
         }
 

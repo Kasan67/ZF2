@@ -35,12 +35,12 @@ class PropertyTag extends AbstractTypeableTag implements TagInterface
      */
     public function getName()
     {
-        return 'property';
+       return 'property';
     }
 
     /**
      * @param string $propertyName
-     * @return self
+     * @return MethodTag
      */
     public function setPropertyName($propertyName)
     {

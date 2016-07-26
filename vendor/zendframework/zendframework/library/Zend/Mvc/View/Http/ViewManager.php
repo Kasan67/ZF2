@@ -145,7 +145,7 @@ class ViewManager extends AbstractListenerAggregate
     /**
      * Instantiates and configures the renderer's helper manager
      *
-     * @return ViewHelperManager
+     * @return \Zend\View\HelperPluginManager
      */
     public function getHelperManager()
     {

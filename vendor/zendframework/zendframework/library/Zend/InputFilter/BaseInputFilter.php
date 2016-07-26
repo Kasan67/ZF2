@@ -369,7 +369,6 @@ class BaseInputFilter implements
      * each specifying a single input.
      *
      * @param  mixed $name
-     * @throws Exception\InvalidArgumentException
      * @return InputFilterInterface
      */
     public function setValidationGroup($name)
@@ -463,11 +462,6 @@ class BaseInputFilter implements
             ));
         }
         $input = $this->inputs[$name];
-
-        if ($input instanceof InputFilterInterface) {
-            return $input->getValues();
-        }
-
         return $input->getValue();
     }
 
@@ -583,15 +577,14 @@ class BaseInputFilter implements
         foreach (array_keys($this->inputs) as $name) {
             $input = $this->inputs[$name];
 
-            if ($input instanceof CollectionInputFilter) {
-                $input->clearValues();
-                $input->clearRawValues();
-            }
-
             if (!isset($this->data[$name])) {
                 // No value; clear value in this input
                 if ($input instanceof InputFilterInterface) {
                     $input->setData(array());
+                    if ($input instanceof CollectionInputFilter) {
+                        $input->clearValues();
+                        $input->clearRawValues();
+                    }
                     continue;
                 }
 
