@@ -5,16 +5,27 @@ namespace Admin\Controller;
 use Application\Controller\BaseAdminController as BaseController;
 use Admin\Form\CategoryAddForm;
 use Admin\Entity\Category;
-
+use Zend\Db\Sql\Select;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
+
+//use Admin\Model\CategoryTable;
 
 class CategoryController extends BaseController
 {
     public function indexAction()
     {
-        $query = $this->getEntityManager()->createQuery('SELECT u FROM Admin\Entity\Category u ORDER BY u.categoryName ASC');
+        $order_by = $this->params()->fromRoute('order_by') ?
+                $this->params()->fromRoute('order_by') : 'id';
+        $order = $this->params()->fromRoute('order') ?
+                $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
+
+        $query = $this->getEntityManager()->createQueryBuilder();
+        $query
+            ->select('u')
+            ->from('Admin\Entity\Category', 'u')
+            ->orderBy('u.'.$order_by, $order);
         
         $adapter = new DoctrineAdapter(new ORMPaginator($query));
 
@@ -22,7 +33,11 @@ class CategoryController extends BaseController
         $paginator->setDefaultItemCountPerPage(3);
         $paginator->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
         
-        return array('category' => $paginator);
+        return array('category' => $paginator,
+                    'order_by' => $order_by,
+                    'order' => $order,
+                    );
+        
     }
     
     public function addAction()

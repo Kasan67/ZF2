@@ -20,4 +20,20 @@ class Module
         );
     }
     
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+                    return $serviceManager->get('doctrine.authenticationservice.orm_default');
+                },
+                'Admin\Service\IsExistValidator' => function($serviceLocator){
+                    $entityManager = $serviceLocator->get('Doctrine\ORM\EntityManager');
+                    $repository = $entityManager->getRepository('Admin\Entity\Customer');
+                    
+                    return new \Admin\Service\IsExistValidator($repository);
+                },
+            )
+        );
+    }
 }

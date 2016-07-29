@@ -232,4 +232,15 @@ class Category extends \Admin\Entity\Category implements \Doctrine\ORM\Proxy\Pro
         return parent::getArrayCopy();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchAll(\Zend\Db\Sql\Select $select = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'fetchAll', array($select));
+
+        return parent::fetchAll($select);
+    }
+
 }

@@ -15,17 +15,24 @@
     echo $flash->render('default', array('alert', 'alert-dismissable', 'alert-default'));
     echo $flash->render('success', array('alert', 'alert-dismissable', 'alert-success'));
 
+$url_order = 'ASC';  // the following lines
+if ($order_by == 'login')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'email')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accountExpired')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 ?>
 <table class="table table-stripped table-hover">
     <tbody>
         <tr>
             <th>id</th>
             <th>Category</th>
-            <th>Login</th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'login', 'order' => $url_order)); ?>">Login <?php if ($order_by == 'login'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
             <th>Password</th>
-            <th>Email</th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'email', 'order' => $url_order)); ?>">Email <?php if ($order_by == 'email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
             <th>AvatarExtension</th>
-            <th>RegistrationDate</th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'accountExpired', 'order' => $url_order)); ?>">RegistrationDate<?php if ($order_by == 'accountExpired'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
             <th>Action</th>
         </tr>
         

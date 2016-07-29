@@ -15,12 +15,16 @@
     echo $flash->render('default', array('alert', 'alert-dismissable', 'alert-default'));
     echo $flash->render('success', array('alert', 'alert-dismissable', 'alert-success'));
 
+$url_order = 'ASC';  // the following lines
+if ($order_by == 'categoryName')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
 ?>
 <table class="table table-stripped table-hover">
     <tbody>
         <tr>
             <th>Id</th>
-            <th>Name</th>
+            <th><a href="<?php echo $this->url('admin/category', array('order_by' => 'categoryName', 'order' => $url_order)); ?>">Name <?php if ($order_by == 'categoryName'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
             <th>Action</th>
         </tr>
         

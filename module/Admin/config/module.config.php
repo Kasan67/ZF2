@@ -1,5 +1,7 @@
 <?php
 
+namespace Admin;
+
 return array(
     
     'doctrine' => array(
@@ -39,7 +41,7 @@ return array(
                     'route'    => '/admin/',
                     'defaults' => array(
                         'controller' => 'Admin\Controller\Index',
-                        'action'     => 'index',
+                        'action'     => 'login',
                     ),
                 ),
                 'may_terminate' => true,
@@ -48,7 +50,13 @@ return array(
                     'category' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => 'category/[:action/][:id/]',
+                            'route' => 'category/[:action/][:id/][/order_by/:order_by][/:order]',
+                            'constraints' => array(
+                                'action' => '(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9]+',
+                                'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'order' => 'ASC|DESC',
+                            ),
                             'defaults' => array(
                                 'controller' => 'category',
                                 'action' => 'index'
@@ -58,7 +66,7 @@ return array(
                     'customer' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => 'customer/[:action/][:id/]',
+                            'route' => 'customer/[:action/][:id/][/order_by/:order_by][/:order]',
                             'defaults' => array(
                                 'controller' => 'customer',
                                 'action' => 'index'
@@ -118,6 +126,25 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+        'display_exceptions' => true,
+    ),
+    'doctrine' => array(
+        
+        'authentication' => array(
+            'orm_default' => array(
+                'identity_class' => '\Admin\Entity\Customer',
+                'identity_property' => 'login',
+                'credential_property' => 'password',
+//                'credential_callable' => function(\Admin\Entity\Customer $user, $password){
+//                    if($user->getPassword() == $password){
+//                        return true;
+//                    }else{
+//                        return false;
+//                    }
+//                },
+                
+            ),
         ),
     ),
     

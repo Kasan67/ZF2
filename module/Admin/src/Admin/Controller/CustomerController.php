@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-use Application\Controller\BaseController as BaseController;
+use Application\Controller\BaseAdminController as BaseController;
 
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -14,6 +14,7 @@ use Admin\Form\CustomerAddForm;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 //use DoctrineORMModule\Form\Annotation\AnnotationBuilder;
+use Zend\Db\Sql\Select;
 
 class CustomerController extends BaseController
 {
@@ -49,11 +50,16 @@ class CustomerController extends BaseController
     
     public function indexAction()
     {
+        $order_by = $this->params()->fromRoute('order_by') ?
+                $this->params()->fromRoute('order_by') : 'id';
+        $order = $this->params()->fromRoute('order') ?
+                $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
+
         $query = $this->getEntityManager()->createQueryBuilder();
         $query
             ->select('u')
             ->from('Admin\Entity\Customer', 'u')
-            ->orderBy('u.id', 'DESC');
+            ->orderBy('u.'.$order_by, $order);
 
         $adapter = new DoctrineAdapter(new ORMPaginator($query));
 
@@ -61,7 +67,10 @@ class CustomerController extends BaseController
         $paginator->setDefaultItemCountPerPage(3);
         $paginator->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
         
-        return array('customers' => $paginator);
+        return array('customers' => $paginator,
+                    'order_by' => $order_by,
+                    'order' => $order,
+                    );
     }
     
     public function addAction()

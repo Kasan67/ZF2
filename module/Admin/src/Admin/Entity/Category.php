@@ -77,4 +77,5 @@ class Category
     {
         return get_object_vars($this);
     }
+    
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class CustomerRepository extends EntityRepository
 {
-    public function login(\Blog\Entity\Customer $user, $sm){
+    public function login(\Admin\Entity\Customer $user, $sm){
         $authService = $sm->get('Zend\Authentication\AuthenticationService');
         $adapter = $authService->getAdapter();
         $adapter->setIdentityValue($user->getLogin());
