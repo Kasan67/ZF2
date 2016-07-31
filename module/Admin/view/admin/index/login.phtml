@@ -1,6 +1,3 @@
-<?php echo $this->messages; ?>
-
-
 <?php 
 $user = $this->identity();
 
@@ -15,11 +12,19 @@ if(empty($user)){
     echo $this->form()->closeTag();
     
     echo 'Вход не выполнен';
+} else { 
+    $av = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $user->getId();
+    if (!file_exists($av)) {
+        $av = '/upload/default';
+    } else {
+        $av = '/upload/' . $user->getId();
+    }
 ?>
-<!--<br><a href="<?php // echo $this->url('admin/default', array('controller' => 'index', 'action' => 'register'));?>"><?php echo "Регистрация"; ?></a>-->
-<?php 
-} else {
-    echo 'Авторизован как ' . $this->escapeHtml($user->getLogin());
-?>
-<br><a href="<?php echo $this->url('admin/', array('controller' => 'index', 'action' => 'logout'));?>"><?php echo "Выход"; ?></a>
+    <div class="image-box">
+        <img src="<?php echo $av; ?>"/> 
+    </div>
+    <?php echo 'Авторизован как ' . $this->escapeHtml($user->getLogin()); ?>
+    <br><a href="<?php echo $this->url('admin/default', array('controller' => 'index', 'action' => 'logout'));?>"><?php echo "Выход"; ?></a>
+    <hr>
+    <br><div class="nav navbar-nav"><?php echo $this->navigation('admin_navigation')->menu()->setUlClass('nav navbar-nav'); ?></div>
 <?php } ?>

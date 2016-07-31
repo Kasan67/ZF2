@@ -15,57 +15,66 @@
     echo $flash->render('default', array('alert', 'alert-dismissable', 'alert-default'));
     echo $flash->render('success', array('alert', 'alert-dismissable', 'alert-success'));
 
-$url_order = 'ASC';  // the following lines
-if ($order_by == 'login')
+$url_order = 'ASC';
+if ($order_by == 'login') {
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
-elseif ($order_by == 'email')
+} elseif ($order_by == 'email') {
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
-elseif ($order_by == 'accountExpired')
+} elseif ($order_by == 'accountExpired') {
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
-?>
+} ?>
+
 <table class="table table-stripped table-hover">
     <tbody>
         <tr>
-            <th>id</th>
+            <th>Avatar</th>
             <th>Category</th>
-            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'login', 'order' => $url_order)); ?>">Login <?php if ($order_by == 'login'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'login', 'order' => $url_order)); ?>">Login </a></th>
             <th>Password</th>
-            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'email', 'order' => $url_order)); ?>">Email <?php if ($order_by == 'email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'email', 'order' => $url_order)); ?>">Email </a></th>
             <th>AvatarExtension</th>
-            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'accountExpired', 'order' => $url_order)); ?>">RegistrationDate<?php if ($order_by == 'accountExpired'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th><a href="<?php echo $this->url('admin/customer', array('order_by' => 'accountExpired', 'order' => $url_order)); ?>">Account Expired </a></th>
             <th>Action</th>
         </tr>
         
-<?php 
-        
-    foreach($customers as $item){
+<?php   foreach ($customers as $item) { 
         $category = $item->getCategory();
-        if($category){
+        if ($category) {
             $catName = $category->getCategoryName();
         } else {
             $catName = '';
         }
-    echo "<tr>
-                <td>{$item->getId()}</td>
-                <td>{$catName}</td>
-                <td>{$item->getLogin()}</td>
-                <td>{$item->getPassword()}</td>
-                <td>{$item->getEmail()}</td>
-                <td>{$item->getAvatarExtension()}</td>
-                <td>{$item->getAccountExpired()->format('Y-m-d H:i:s')}</td>";
-    echo    '<td><a href="'.$this->url('admin/customer', 
-                                                array('action' => 'edit', 'id' => $item->getId())).'" class=\'btn btn-info\'>Редактировать</a>&nbsp;&nbsp;
-                             <a href="'.$this->url('admin/customer', 
-                                                array('action' => 'delete', 'id' => $item->getId())).'" onclick="if (confirm(\'Удалить пользователя?\')) { document.location = this.href; } return false;" class=\'btn btn-danger\'>Удалить</a></td>';
-    }
-    
-?>
+        $av = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $item->getId();
+        if (!file_exists($av)) {
+            $av = '/upload/default';
+        } else {
+            $av = '/upload/' . $item->getId();
+        }
+        ?>
+        <tr>
+            <td class="image-box"><img src="<?php echo $av; ?>" /></td> 
+            <td><?php echo $this->escapeHtml($catName);?></td>
+            <td><?php echo $this->escapeHtml($item->getLogin()); ?></td>
+            <td><?php echo $this->escapeHtml($item->getPassword()); ?></td>
+            <td><?php echo $this->escapeHtml($item->getEmail()); ?></td>
+            <td><?php echo $this->escapeHtml($item->getAvatarExtension()); ?></td>
+            <td><?php echo $this->escapeHtml($item->getAccountExpired()->format('Y-m-d H:i:s')); ?></td>
+            <td>
+                <a href="<?php echo $this->url('admin/customer', array(
+                                            'action' => 'edit', 
+                                            'id' => $item->getId())
+                                            ); ?>" class='btn btn-info'>Редактировать</a>
+                <a href="<?php echo $this->url('admin/customer', array(
+                                            'action' => 'delete', 
+                                            'id' => $item->getId())
+                                            ); ?>" onclick="if (confirm('Удалить пользователя?')) { document.location = this.href; } return false; " class='btn btn-danger'>Удалить</a>
+                <a href="<?php echo $this->url('admin/customer', array(
+                                            'action' => 'upload', 
+                                            'id' => $item->getId())
+                                            ); ?>" class='btn btn-success'>Загрузить</a>
+            </td>
+        </tr>
+<?php   } ?>
     </tbody>
 </table>
-
-
-<?php
-
-echo $this->paginationControl($customers, 'Sliding', 'pagination_control', array('route' => 'admin/customer'));
-
-?>
+<?php echo $this->paginationControl($customers, 'Sliding', 'pagination_control', array('route' => 'admin/customer')); ?>

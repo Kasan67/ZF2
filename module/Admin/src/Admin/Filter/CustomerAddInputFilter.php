@@ -25,7 +25,6 @@ class CustomerAddInputFilter extends InputFilter
                 array('name' => 'StringTrim'),
             ), 
         ));
-        
         $this->add(array(
             'name'     => 'password',
             'required' => true,
@@ -33,6 +32,7 @@ class CustomerAddInputFilter extends InputFilter
                 array(
                     'name'    => 'StringLength',
                     'options' => array(
+                        'min' => 3,
                         'max' => 100,
                     ),
                 ),
@@ -41,8 +41,6 @@ class CustomerAddInputFilter extends InputFilter
                 array('name' => 'StringTrim'),
             ), 
         ));
-        
-        
         $this->add(array(
             'name'     => 'email',
             'required' => true,
@@ -50,8 +48,6 @@ class CustomerAddInputFilter extends InputFilter
                 array('name' => 'StringTrim'),
             ), 
         ));
-        
-        
         $this->add(array(
             'name'     => 'category',
             'required' => true,

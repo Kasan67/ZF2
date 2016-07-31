@@ -3,9 +3,6 @@
 namespace Admin\Form;
 
 use Zend\Form\Form;
-//use Zend\InputFilter\Factory as InputFactory;
-//use Zend\InputFilter\InputFilter;
-
 
 class LoginForm extends Form
 {

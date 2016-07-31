@@ -4,15 +4,13 @@ namespace Admin\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Admin\Filter\CustomerAddInputFilter;   
 
-use Admin\Filter\CustomerAddInputFilter;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Admin\Entity\Customer;
-
-class CustomerAddForm extends Form implements ObjectManagerAwareInterface
+class CustomerAddForm 
+    extends Form 
+    implements ObjectManagerAwareInterface
 {
     
     protected $objectManager;
@@ -38,9 +36,7 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
     {
         $this->setAttribute('method', 'post');
         $this->setAttribute('class', 'bs-example form-horizontal');
-        
         $this->setInputFilter(new CustomerAddInputFilter());
-        
         $this->add(array(
             'name' => 'category',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
@@ -56,7 +52,6 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
                 'required' => 'required',
             ),
         ));
-        
         $this->add(array(
             'name' => 'login',
             'type' => 'Text',
@@ -70,7 +65,6 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
                 'required' => 'required',
             ),
         ));
-        
         $this->add(array(
             'name' => 'password',
             'type' => 'Text',
@@ -82,7 +76,6 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
                 'required' => 'required',
             ),
         ));
-        
         $this->add(array(
             'name' => 'email',
             'type' => 'text',
@@ -96,30 +89,17 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
                 'required' => 'required',
             ),
         ));
-        
         $this->add(array(
             'name' => 'accountExpired',
             'type' => 'date',
             'options' => array(
-                'label' => 'Date',
+                'label' => 'Account expired',
             ),
             'attributes' => array(
                 'class' => 'form-control',
                 'required' => 'required',
             ),
         ));
-        
-        $this->add(array(
-            'name' => 'avatarExtension',
-            'type' => 'text',
-            'options' => array(
-                'label' => 'avatarExtension',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
@@ -130,5 +110,4 @@ class CustomerAddForm extends Form implements ObjectManagerAwareInterface
             ),
         ));
     }
-    
 }

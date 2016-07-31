@@ -4,8 +4,8 @@ namespace Admin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Admin\Entity\Repository\CustomerRepository;
-/** 
+
+/**
  * Customer
  *
  * @ORM\Table(name="customer", indexes={@ORM\Index(name="FK_customer_category", columns={"category"})})

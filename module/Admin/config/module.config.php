@@ -6,7 +6,6 @@ return array(
     
     'doctrine' => array(
         'driver' => array(
-            // defines an annotation driver with two paths, and names it `my_annotation_driver`
             'admin_entity' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
@@ -14,21 +13,31 @@ return array(
                     __DIR__ . '/../src/Admin/Entity',
                 ),
             ),
-
-            // default metadata driver, aggregates all other drivers into a single one.
-            // Override `orm_default` only if you know what you're doing
             'orm_default' => array(
                 'drivers' => array(
-                    // register `my_annotation_driver` for any entity under namespace `My\Namespace`
                     'Admin\Entity' => 'admin_entity'
-                )
+                ),
             )
-        )
+        ),
+        'authentication' => array(
+            'orm_default' => array(
+                'object_manager' => 'Doctrine\ORM\EntityManager',
+                'identity_class' => 'Admin\Entity\Customer',
+                'identity_property' => 'login',
+                'credential_property' => 'password',
+                'credential_callable' => function( $user, $passwordGiven) {
+                    if($user->getPassword() == $passwordGiven){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+            ),
+        ),
     ),
-    
     'controllers' => array(
         'invokables' => array(
-            'Admin\Controller\Index' => 'Admin\Controller\IndexController',
+            'index'    =>  'Admin\Controller\IndexController',
             'category' =>  'Admin\Controller\CategoryController',
             'customer' =>  'Admin\Controller\CustomerController',
         ),
@@ -40,7 +49,7 @@ return array(
                 'options' => array(
                     'route'    => '/admin/',
                     'defaults' => array(
-                        'controller' => 'Admin\Controller\Index',
+                        'controller' => 'index',
                         'action'     => 'login',
                     ),
                 ),
@@ -67,11 +76,29 @@ return array(
                         'type' => 'segment',
                         'options' => array(
                             'route' => 'customer/[:action/][:id/][/order_by/:order_by][/:order]',
+                            'constraints' => array(
+                                'action' => '(?!\border_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9]+',
+                                'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'order' => 'ASC|DESC',
+                            ),
                             'defaults' => array(
                                 'controller' => 'customer',
                                 'action' => 'index'
                             )
                         )
+                    ),
+                    'default' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => 'admin/[:action/[:id/]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                            ),
+                        ),
                     ),
                 ), //child_routes
             ),
@@ -128,24 +155,6 @@ return array(
             __DIR__ . '/../view',
         ),
         'display_exceptions' => true,
-    ),
-    'doctrine' => array(
-        
-        'authentication' => array(
-            'orm_default' => array(
-                'identity_class' => '\Admin\Entity\Customer',
-                'identity_property' => 'login',
-                'credential_property' => 'password',
-//                'credential_callable' => function(\Admin\Entity\Customer $user, $password){
-//                    if($user->getPassword() == $password){
-//                        return true;
-//                    }else{
-//                        return false;
-//                    }
-//                },
-                
-            ),
-        ),
     ),
     
 );
